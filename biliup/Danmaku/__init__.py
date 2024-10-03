@@ -197,7 +197,8 @@ class DanmakuClient(IDanmakuClient):
                             msg_time = format(time.time() - start_time, '.3f')
                             d = etree.SubElement(root, 'd')
                             d.set('p', f"{msg_time},1,25,{color},0,0,0,0")
-                            d.text = m["content"]
+                            # 弹幕作者和弹幕内容
+                            d.text = m["name"] + '： '+ m["content"]
                         except:
                             logger.warning(f"{DanmakuClient.__name__}:{self.__url}:弹幕处理异常", exc_info=True)
                             # 异常后略过本次弹幕

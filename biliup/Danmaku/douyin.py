@@ -110,11 +110,11 @@ class Douyin:
                 chat_message = ChatMessage()
                 chat_message.ParseFromString(msg.payload)
                 data = json_format.MessageToDict(chat_message, preserving_proto_field_name=True)
-                # name = data['user']['nickName']
+                name = data['user']['nickName']
                 content = data['content']
                 # print(content)
-                # msg_dict = {"time": now, "name": name, "content": content, "msg_type": "danmaku", "color": "ffffff"}
-                msg_dict = {"content": content, "msg_type": "danmaku"}
+                msg_dict = {"name": name, "content": content, "msg_type": "danmaku"}
+                # msg_dict = {"content": content, "msg_type": "danmaku"}
                 msgs.append(msg_dict)
 
         return msgs, ack
