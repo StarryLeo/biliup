@@ -1,7 +1,7 @@
 # Build biliup's web-ui
 FROM node:lts as webui
-ARG repo_url=https://github.com/biliup/biliup
-ARG branch_name=master
+ARG repo_url=https://github.com/StarryLeo/biliup
+ARG branch_name=dy
 RUN set -eux; \
 	git clone --depth 1 --branch "$branch_name" "$repo_url"; \
 	cd biliup; \
@@ -10,8 +10,8 @@ RUN set -eux; \
 
 # Deploy Biliup
 FROM python:3.12-slim as biliup
-ARG repo_url=https://github.com/biliup/biliup
-ARG branch_name=master
+ARG repo_url=https://github.com/StarryLeo/biliup
+ARG branch_name=dy
 ENV TZ=Asia/Shanghai
 EXPOSE 19159/tcp
 VOLUME /opt
