@@ -25,6 +25,9 @@ def create_event_manager():
     app.context['url_upload_count'] = {}
     # 正在上传的文件 用于同时上传一个url的时候过滤掉正在上传的
     app.context['upload_filename'] = []
+
+    # 边录边传的下载器使用的map
+    app.context['sync_downloader_map'] = {}
     return app
 
 
@@ -40,7 +43,8 @@ async def singleton_check(platform, name, url):
         return
 
     event_manager.send_event(Event(UPLOAD, ({'name': name, 'url': url},)))
-    if await platform(name, url).acheck_stream(True) and platform(name, url).pre_check():
+    p = platform(name, url)
+    if await p.acheck_stream(True) and p.should_record():
         # 需要等待上传文件列表检索完成后才可以开始下次下载
         with NamedLock(f'upload_file_list_{name}'):
             event_manager.send_event(Event(PRE_DOWNLOAD, args=(name, url,)))
@@ -60,7 +64,7 @@ async def shot(event):
             await singleton_check(event, context['PluginInfo'].inverted_index[cur], cur)
             index += 1
             skip = context['PluginInfo'].url_status[cur] == 1 and index < len(event.url_list)
-            if skip:  # 在一次 url_list 内，如果 url 正在下载，则跳过本次等待以加快下一个检测
+            if skip:  # 全部主播检测后不应跳过
                 continue
         except Exception:
             logger.exception('shot')
