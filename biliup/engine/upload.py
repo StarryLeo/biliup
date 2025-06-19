@@ -101,7 +101,8 @@ class UploadBase:
                         break
                 if not have_video:
                     logger.info(f'无视频，过滤删除 - {file}')
-                    UploadBase.remove_file(file)
+                    # FIXME: 文件名有时间差
+                    # UploadBase.remove_file(file)
         return results
 
     @staticmethod
